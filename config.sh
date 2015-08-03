@@ -1,0 +1,6 @@
+APPNAME="example"
+PRODPORT=8888
+DEVPORT=8889
+BKDIR="/tmp"
+
+
