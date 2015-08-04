@@ -19,18 +19,34 @@ Templates
 .html files (served from .h.HOME) are interpreted and expressions within {{ and
 }} are evaluated as Q. 
 
+Timers
+------
+Define minutely[], hourly[], and daily[] - these are called automatically from our
+.z.ts handler, which dispatches every 60 seconds.
+
+Backups
+-------
+Backups of the entire environment are taken with daily[] and saved in
+/tmp/APPNAME[WD].qdb. WD is the week day number, from 0 to 6. By using this as
+part of the filename, we'll never overflow the disk, and you keep seven days of
+backups too.
+
 "Analytics"
 -----------
-A log of hits is stored in HITS. isbot=1b if the user agent (available as UA) matches "*[Bb]ot*".
-This is available to the running script as ISBOT as well.
+A log of hits is stored in HITS. isbot=1b if the user agent (available as UA)
+matches "*[Bb]ot*".  This is available to the running script as ISBOT as well.
 
-A word about proxying
----------------------
-
+About proxying
+--------------
 I tend to proxy my stuff through Nginx for safety and perceived static file serving
-performance.
+performance. An example config file can be found in nginx.conf.
 
-An example config file can be found in nginx.conf
+Performance
+-----------
+"Seems OK?"
+
+I haven't had the need to try improving the performance of this software. It
+seems pretty quick to me.
 
 start-prod.sh
 -------------
@@ -47,9 +63,20 @@ start-dev.sh
 ------------
 Start the server (APPNAME.q) in development mode:
 - binds to 127.0.0.1:8889 (edit config.sh to change)
-- logging is on
+- logging is on (-l)
 - output tee'd to /tmp/q-APPNAME-dev.log
 - reporting client-side exceptions is ON (-e 1). This will halt your REPL on
 	error, good for debugging.
+
+Starting at system boot
+-----------------------
+
+This seems to work in `/etc/rc.local`:
+
+```
+cd /home/APPNAME/app; 
+nohup sh start-prod.sh 2>&1&
+echo $! > /var/run/q-APPNAME-prod.pid
+```
 
 
