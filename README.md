@@ -5,6 +5,9 @@ Q Minimum Viable Product is a barebones boiler plate Q webserver that includes
 templating, serving from html/, index files, and logging. If you are playing
 around with a Q-based web site/service idea, this is a great place to start.
 
+All of this is implemented in about 40 lines of code, with zero dependencies
+other than Q itself. By contrast, this README is already twice that size.
+
 This is mostly an extract from the code used to run http://q4a.co/
 
 Config
