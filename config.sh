@@ -1,5 +1,7 @@
 APPNAME="example"
+PRODHOST=localhost
 PRODPORT=8888
+DEVPORT=localhost
 DEVPORT=8889
 BKDIR="/tmp"
 
