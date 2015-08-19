@@ -10,6 +10,12 @@ other than Q itself. By contrast, this README is already twice that size.
 
 This is mostly an extract from the code used to run http://q4a.co/
 
+What is Q?
+----------
+
+Q is an insanely powerful programming language developed by 
+(Kx Systems)[http://kx.com].
+
 Configuration & Use
 -------------------
 
@@ -20,8 +26,36 @@ Rename example.q to APPNAME.q.
 Set APPNAME and host/port bind details in config.sh. Keep this file bare
 minimum and don't use shell expressions - it is loaded by Q as well.
 
+example.q/APPNAME.q
+-------------------
+This file is ordered such that definitions of globals comes first, then
+low level functions, then mid-level functions that manipulate data,
+and then the high level stuff that calls everything else, such as the
+.z.ph (HTTP GET) handler. It's written this way so that you can start
+from the top and read down, with full understanding of everything as you
+go. 
+
 This isn't a framework. Feel free to remove anything you don't need from
-APPNAME.q.
+APPNAME.q. Hack at will.
+
+A note on -l (logging mode)
+---------------------------
+
+I like using -l because I know I can be sloppy about my data and it will persist
+to the next session. -l is the default in the start scripts provided here.
+
+You should be aware of the way it works because it has a 
+few odd caveats:
+
+* For updates to be logged, they must be sent to the currently running server
+  as so: ```0(upsert;`Table;row)```. Updates done at the console won't be logged.
+* As you do work interactively, be sure to flush your changes to disk with \l.
+	You can set this to occur automatically every 60 seconds with
+	```minutely:{system"l"}```
+* The log file is the name of your start script with .q replaced by .log. Keep
+  this in mind as you change your script name.
+
+I hope to write a more thorough version of this logging guide soon.
 
 Templates
 ---------
