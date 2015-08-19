@@ -10,12 +10,18 @@ other than Q itself. By contrast, this README is already twice that size.
 
 This is mostly an extract from the code used to run http://q4a.co/
 
-Config
-------
-Set APPNAME and port details in config.sh
+Configuration & Use
+-------------------
 
-Keep this file bare minimum and don't use shell expressions - it is loaded by Q
-as well.
+Think of a name for your app. Be sure to make the name tacky or stupid.
+
+Rename example.q to APPNAME.q.
+
+Set APPNAME and host/port bind details in config.sh. Keep this file bare
+minimum and don't use shell expressions - it is loaded by Q as well.
+
+This isn't a framework. Feel free to remove anything you don't need from
+APPNAME.q.
 
 Templates
 ---------
