@@ -6,6 +6,7 @@ value 0N! ssr[";\n" sv read0 `:config.sh;"=";":"];
 if[not `HITS in tables[];0 (set;`HITS;0N!([]u:();ip:();at:();isbot:()))]      
 PATHINFO:"";                                               /current page source file
 QS:"";                                                     /current request query string
+POST:()!();
 TITLE:"";                                                  /set by page being requested
 UA:"";
 ISBOT:0b;
@@ -13,6 +14,14 @@ ISBOT:0b;
 r:{system"l ",APPNAME,".q"}                                /helper func: reload script (for interactive dev)
 backup:{(fn:`$":",BKDIR,"/",APPNAME,string[.z.D mod 7],".qdb") set get `.;fn}
 loghit:{0(insert;`HITS;(`$x;.z.a;.z.p;ISBOT))}
+parsereq:{
+	uri:x[0];
+	if[0=count p:" "vs x[0];[
+		uri:p[0];POST:pair[0]!ssr[;"+";" "]each .h.uh each last pair:flip "="vs/: "&"vs last p
+	]];
+	`PATHINFO`QS set' 2#"?"vs x[0],"?"; QS::.h.uh QS; /parse req URL and urldecode query string
+	UA::x[1]`$"User-agent"; ISBOT::UA like"*[Bb]ot*";
+}
 
 minutely:{}; hourly:{}; daily:backup;                      /set these for timers
 .z.ts:{minutely[]; if[0=(`minute$.z.t) mod 60;hourly[]]; if[0=`hh$.z.T;daily[]]}
@@ -32,11 +41,11 @@ serve:{
 	body:tmpl[$[count c:read[x];[loghit[x]; c];read["404.html"]]]; 	
 	.h.hy[`html; source["header.html"], body, source["footer.html"]]}
 
-.z.ph:{0N!(`zph;x);                                        /our HTTP server handler
-	`PATHINFO`QS set' 2#"?"vs x[0],"?"; QS::.h.uh QS;        /parse req URL and urldecode query string
-	UA::x[1]`$"User-agent"; ISBOT::UA like"*[Bb]ot*";
+.z.ph:{0N!(`zph;x);parsereq x;                             
 	if[""~PATHINFO;PATHINFO::"index/"];                      /empty uri? use index/ 
-	if["/"~last PATHINFO;PATHINFO::(-1 _ PATHINFO),".html"]; /ends with slash? use [name].md
+	if["/"~last PATHINFO;PATHINFO::(-1 _ PATHINFO),".html"]; /ends with slash? use [name].html
 	serve[PATHINFO]}
+
+.z.pp:{0N!(`zpp;x);parsereq x;"POST!"}
 
 
